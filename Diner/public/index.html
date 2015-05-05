@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" href="css/animate.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+	<meta charset="UTF-8">
+	<title>Driving Dead Diner</title>
+</head>
+<body>
+<header>Where you come to eat so I don't get eaten . . .</header>
+
+<div class="container-fluid body-content">
+ <img id="truck" class="animated slideInLeft" src="./images/food_truck.png">
+  <!-- this will need other divs so it can look like menu boards -->
+  <div id="content">
+  <div id="nav">
+    <li><a href="/">Home</a></li>
+  </div>
+ 
+  <br> testing <br>
+  <ul class="categories-list">
+  </ul>
+ </div>
+</div>
+
+<footer>Find me on the corner of 5 Ave. and 21st when I'm not on the run. Let me cater your next event! Reservations made at 555 - 555 - 4321. </footer>
+
+<!-- template for individual category -->
+<script type="text/template" id="category-temp">
+  <h2>
+      <%= category.attributes.name %> 
+      <%= category.attributes.dishes.forEach(function(dish) {}) %>
+  </h2>
+  
+  <div class="dishes-list"></div>
+  <!-- add more dishes here or in sep template? hide? -->
+    <ul>
+     <!--  <li>Category Name: <input type="text" class="new-category-name" /> </li> -->
+     <label>Add a New Dish:</label>
+      <li>New Dish: <input class="new-dish-name" type="text" /></li>
+      <li>Dish Description: <input class="new-dish-description" type="text" /></li>
+      <li>Dish Image: <input class="new-dish-image" type="text" placeholder="url of jpg, png, tif"></li>
+      <li>Dish Price: <input class="new-dish-price" type="number"></li>
+      <li><input type="submit" class="new-dish-submit" value="Create New Dish"></li>
+    </ul>
+    <div class="error-message"></div>
+</script>
+
+<script type="text/template" id="category-sum-temp">
+  <span class="category-name"><%= name %></span>
+  <span class="category-dishes">
+    <ul>
+    <% dishes.forEach(function(dish){ %>
+        <li><strong><%= dish.name %></strong>
+            <%= dish.description %>
+            <small><%= dish.price %>
+        </li>
+     <% }) %>
+    </ul>
+  </span>
+</script>
+
+<script type="text/template" id="dish-temp">
+  <div class="dish">
+    <h2 class="dish-name"><%= dish.name %></h2>
+    <img src="<%= dish.image_url %>">
+    <p class="dish-description"><%= dish.description %></p>
+    <small class="dish-price"><%= dish.price %></small>
+  </div>
+</script>
+
+ <!-- listing all of the catgories -->
+<script type="text/template" id="categories-list-temp">
+  <ul class="categories-list">
+     <% categories.forEach(function(category){ %>
+          <li><a href="#categories/<%= category.id %>"><%= category.name %></a>
+     <% }) %>
+  </ul>
+
+ <!-- new template form or show/hide? add validation! -->
+  <h2>New Category</h2>
+  <ul>
+    <li>Name: <input type="text" class="new-category-name" /> </li>
+    <li>New Dish: <input class="new-dish-name" type="text" /></li>
+    <li>Dish Description: <input class="new-dish-description" type="text" /></li>
+    <li>Dish Image: <input class="new-dish-image" type="text" placeholder="url of jpg, png, tif"></li>
+    <li>Dish Price: <input class="new-dish-price" type="number"></li>
+    <li><input type="submit" class="new-category-submit" value="Create New Category"></li>
+  </ul>
+  <div class="error-message"></div>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+<script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
+<script type="text/javascript" src="./js/backbone-relational.js"></script>
+<script src = "scripts/models/models.js"></script>
+<script src = "scripts/collections/collections.js"></script>
+<script src = "scripts/views/views.js"></script>
+<script src = "scripts/routers/routers.js"></script>
+</body>
+</html>

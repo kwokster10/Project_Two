@@ -1,0 +1,47 @@
+body {
+  height: 100%;
+  overflow: hidden;
+}
+#content img {
+  width: 30%;
+}
+.container-fluid.body-content {
+  position: absolute;
+  top: 70px;
+  bottom: 60px;
+  right: 0;
+  left: 0;
+  padding-top: 10px;
+  overflow-y: auto;
+  font-family: 'Slackey', cursive;
+}
+#truck {
+  position: absolute;
+  height: 102%;
+  z-index: -1;
+}
+.container-fluid.body-content li{
+  display: block;
+  padding: 5px;
+}
+header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding: 20px 0 0 20px;
+    background-color: lightgreen;
+    height: 70px;
+    font-size: 30px;
+    font-family: 'Slackey', cursive;
+}
+footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 0 0 20px;
+    background-color: lightblue;
+    height: 50px;
+    font-family: 'Slackey', cursive;
+}
