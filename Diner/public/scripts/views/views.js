@@ -125,10 +125,11 @@ var CategoryListView = Backbone.View.extend({
 	tagName: "li",
 	className: "category-list-view", 
 	initialize: function(){
-		_.bindAll(this, "render", "render_category_summary", "on_submit", "on_category_created", "on_error");
+		_.bindAll(this, "render", "on_submit", "on_category_created", "removeView", "on_error");
 		this.model.bind("reset", this.render);
 		this.model.bind("change", this.render);
-		this.model.bind("add", this.render_category_summary);
+		this.model.bind("add", this.render);
+		this.listenTo(this.model, "remove", this.removeView);
 	},
 
 	template: _.template($("#categories-list-temp").html()),
@@ -136,22 +137,51 @@ var CategoryListView = Backbone.View.extend({
 	render: function(){
 		console.log("catListRender");
 		// think I will need to pass {category: this.model.toJSON}?
-		this.$el.html(this.template({category: this.model.toJSON()}));
-		this.model.forEach(this.render_category_summary);
+		// this.$el.html(this.template({category: this.model.toJSON()}));
+		// this.model.forEach(this.render_category_summary);
+		// return this;
+		this.$el.empty();
+		this.$el.html(this.template({categories: this.model.toJSON()}));
 		return this;
+		// var ul = $("#category-list");
+		// this.$el.html('<a href="/#categories/"')
+
+		// var container = document.createDocumentFragment();
+		
+
+		// _.each(this._views, function(subview){
+		// 	console.log("subview");
+		// 	console.log(subview);
+		// 	container.appendChild(subview.render().el)
+		// });
+		// this.$el.append(ul);
+		// this.$el.append(container);
+		// this.model.forEach(this.render_category_summary);
+		// return this;
 	},
 
 	events: {
 		// add validation
-		"click input[type=submit]": "on_submit"
+		"click input[type=submit]": "on_submit",
+		"click .delete-cat": "deleteCat"
 	},
 
-	render_category_summary: function(category){
-		// what is category here? is it actually being passed categories?
-		console.log("catListSumRender");
-		var categorySumView = new CategorySumView({model: category});
-		this.$el.find("ul.categories-list").html(this.template({categories: this.model.toJSON()}));
+	deleteCat: function(){
+		console.log("deleteCat");
+		console.log(this.options.collection);
+		this.options.collection.remove(this.model);
 	},
+
+	removeView: function(){
+		this.remove();
+	},
+
+	// render_category_summary: function(category){
+	// 	// what is category here? is it actually being passed categories?
+	// 	console.log("catListSumRender");
+	// 	var categorySumView = new CategorySumView({model: category});
+	// 	this.$el.find("ul.categories-list").html(this.template({categories: this.model.toJSON()}));
+	// },
 
 	// currently commented out in html
 	on_submit: function(e) {
@@ -169,7 +199,7 @@ var CategoryListView = Backbone.View.extend({
 
 		category.save({}, {
 			success: function(catModel){
-
+				console.log(catModel);
 				_this.model.add(catModel);
 
 				var dish = new Dishes({

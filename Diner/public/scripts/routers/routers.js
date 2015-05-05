@@ -25,17 +25,22 @@ var DinerRouter = Backbone.Router.extend({
 
 	// showing each category which will grab all dishes related to it
 	showCat: function(cid){
-		var category = Categories.findOrCreate({id: cid});
-		var categoryView = new CategoryView({el: $("#content"), model: category});
-		category.fetch();
+			var category = Categories.findOrCreate({id: cid});
+		// 	var complete = _.invoke([category], "fetch");
+		// $.when.apply($, complete).done(function(){
+			category.fetch();
+			var categoryView = new CategoryView({el: $("#content"), model: category});
+				
+		// });
 	}
 }); 
 
+// starting the router
 var dinerRouter = new DinerRouter();
-// for regular looking routes in supported browsers; bookmarkable links
+
+// for bookmarkable url with relational
 Backbone.history.start(function(){
+	// removes all the relationships to avoid id error
 	Backbone.Relational.store.removeModelScope(window);
 });
 
-
-// });

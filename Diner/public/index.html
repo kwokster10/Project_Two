@@ -51,17 +51,7 @@
 </script>
 
 <script type="text/template" id="category-sum-temp">
-  <span class="category-name"><%= name %></span>
-  <span class="category-dishes">
-    <ul>
-    <% dishes.forEach(function(dish){ %>
-        <li><strong><%= dish.name %></strong>
-            <%= dish.description %>
-            <small><%= dish.price %>
-        </li>
-     <% }) %>
-    </ul>
-  </span>
+  <ul></ul>
 </script>
 
 <script type="text/template" id="dish-temp">
@@ -90,6 +80,8 @@
   <ul class="categories-list">
      <% categories.forEach(function(category){ %>
           <li><a href="/#categories/<%= category.id %>"><%= category.name %></a>
+            <button class="delete-cat">delete</button>
+          </li>
      <% }) %>
   </ul>
 
