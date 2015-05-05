@@ -83,7 +83,6 @@ app.get('/dishes', function(req, res) {
 		if(err) {
 			throw err;
 		}
-		console.log(rows);
 		res.json(rows);
 	});
 });

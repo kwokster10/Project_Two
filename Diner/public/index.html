@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" href="css/animate.min.css">
   <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
-	<meta charset="UTF-8">
-	<title>Driving Dead Diner</title>
+  <meta charset="UTF-8">
+  <title>Driving Dead Diner</title>
 </head>
 <body>
 <header>Where you come to eat so I don't get eaten . . .</header>
 
 <div class="container-fluid body-content">
  <img id="truck" class="animated slideInLeft" src="./images/food_truck.png">
-  <!-- this will need other divs so it can look like menu boards -->
-  <div id="content">
-  <div id="nav">
-    <li><a href="/">Home</a></li>
-  </div>
  
-  <br> testing <br>
+  <!-- this will need other divs so it can look like menu boards -->
+  <div id="nav">
+  <li><a href="/">Home</a></li>
+  <div id="content">
   <ul class="categories-list">
+ 
+    
+  <br> Still here? <br>
+  </div>
   </ul>
  </div>
 </div>
 
-<footer>Find me on the corner of 5 Ave. and 21st when I'm not on the run. Let me cater your next event! Reservations made at 555 - 555 - 4321. </footer>
+<footer>Find me on the corner of 5 Ave. and 21st when I'm not on the run. Let me cater your next event! Reservations made at 555 - 555 - 4321.</footer>
 
 <!-- template for individual category -->
 <script type="text/template" id="category-temp">
   <h2>
       <%= category.attributes.name %> 
-      <%= category.attributes.dishes.forEach(function(dish) {}) %>
   </h2>
   
   <div class="dishes-list"></div>
   <!-- add more dishes here or in sep template? hide? -->
-    <ul>
-     <!--  <li>Category Name: <input type="text" class="new-category-name" /> </li> -->
+  <br>
+    <ul  id="add-dish-form">
      <label>Add a New Dish:</label>
-      <li>New Dish: <input class="new-dish-name" type="text" /></li>
+      <li>Dish Name: <input class="new-dish-name" type="text" /></li>
       <li>Dish Description: <input class="new-dish-description" type="text" /></li>
       <li>Dish Image: <input class="new-dish-image" type="text" placeholder="url of jpg, png, tif"></li>
       <li>Dish Price: <input class="new-dish-price" type="number"></li>
@@ -65,18 +66,30 @@
 
 <script type="text/template" id="dish-temp">
   <div class="dish">
-    <h2 class="dish-name"><%= dish.name %></h2>
+    <h3 class="dish-name"><%= dish.name %></h3>
     <img src="<%= dish.image_url %>">
-    <p class="dish-description"><%= dish.description %></p>
-    <small class="dish-price"><%= dish.price %></small>
+    <p class="dish-description"><%= dish.description %>
+    <small class="dish-price">$<%= dish.price %></small></p>
+    <button class="edit-dish">edit</button>
+    <button class="delete-dish">delete</button>
   </div>
+    <div id="edit-dish-form<%= dish.id %>" style="display: none">
+    <ul>
+     <label>Edit Dish:</label>
+      <li>Name: <input class="edit-dish-name<%= dish.id %>" type="text" value="<%= dish.name %>" /></li>
+      <li>Dish Description: <input class="edit-dish-description<%= dish.id %>" type="text" value="<%= dish.description %>" /></li>
+      <li>Dish Image: <input class="edit-dish-image<%= dish.id %>" type="text" value="<%= dish.image_url %>"></li>
+      <li>Dish Price: <input class="edit-dish-price<%= dish.id %>" type="number" value="<%= dish.price %>"></li>
+      <li><input type="submit" class="edit-dish-submit" value="Update Dish"></li>
+    </ul>
+    </div>
 </script>
 
  <!-- listing all of the catgories -->
 <script type="text/template" id="categories-list-temp">
   <ul class="categories-list">
      <% categories.forEach(function(category){ %>
-          <li><a href="#categories/<%= category.id %>"><%= category.name %></a>
+          <li><a href="/#categories/<%= category.id %>"><%= category.name %></a>
      <% }) %>
   </ul>
 

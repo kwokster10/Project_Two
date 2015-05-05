@@ -1,7 +1,7 @@
 // $(document).ready(function(){
 var DinerRouter = Backbone.Router.extend({
 	routes: {
-		"categories/:cId": "showCat",
+		"categories/:id": "showCat",
 		"": "allCats"
 		// "categories": "allCats"
 		// "/dishes": 
@@ -19,10 +19,10 @@ var DinerRouter = Backbone.Router.extend({
 	},
 
 	// showing each category which will grab all dishes related to it
-	showCat: function(cId){
-		var category = new Categories({id: cId});
-		category.fetch();
+	showCat: function(id){
+		var category = new Categories({id: id});
 		var categoryView = new CategoryView({el: $("#content"), model: category});
+		category.fetch();
 	}
 }); 
 
