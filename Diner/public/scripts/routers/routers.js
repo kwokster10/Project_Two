@@ -25,7 +25,7 @@ var DinerRouter = Backbone.Router.extend({
 
 	// showing each category which will grab all dishes related to it
 	showCat: function(cid){
-		var category = new Categories({id: cid});
+		var category = Categories.findOrCreate({id: cid});
 		var categoryView = new CategoryView({el: $("#content"), model: category});
 		category.fetch();
 	}
@@ -33,5 +33,9 @@ var DinerRouter = Backbone.Router.extend({
 
 var dinerRouter = new DinerRouter();
 // for regular looking routes in supported browsers; bookmarkable links
-Backbone.history.start();
+Backbone.history.start(function(){
+	Backbone.Relational.store.removeModelScope(window);
+});
+
+
 // });

@@ -61,7 +61,7 @@ var DishView = Backbone.View.extend({
 		// this.model.bind("change", this.render);
 		// this.model.bind("remove", this.removeView);
 		// this.model.bind("reset", this.render);
-		this.listenTo(this.model, "change", this.render);
+		this.listenTo(this.model, "add change", this.render);
 		this.listenTo(this.model, "remove", this.removeView);
 	},
 
@@ -103,15 +103,12 @@ var DishView = Backbone.View.extend({
 
 		this.model.save();
       
-		dinerRouter.navigate("#categories/"+c_id+"/", {replace: false});
+		dinerRouter.navigate("#categories/"+c_id, {replace: false});
 	},
 
 	deleteDish: function(){
-		var c_id = this.model.attributes.category_id;
-		// why isn't the dom refreshing?
-		console.log(this.model.id);
 		this.model.destroy();
-		dinerRouter.navigate("#categories/"+c_id+"/", {replace: false});
+		dinerRouter.navigate("#categories/"+c_id, {trigger: true});
 	},
 
 	render: function(){
@@ -159,31 +156,64 @@ var CategoryListView = Backbone.View.extend({
 	// currently commented out in html
 	on_submit: function(e) {
 		var category = new Categories({
-			name: this.$(".new-category-name").val()
+			name: this.$(".new-category-name").val().trim()
 		});
-		category.save({}, {success: this.on_category_created, error: this.on_error});
+
+
+		console.log(category);
+		console.log(category.attributes);
+		console.log(category.attributes.name);
+		console.log(category.get("id"));
+		
+		var _this = this;
+
+		category.save({}, {
+			success: function(catModel){
+
+				_this.model.add(catModel);
+
+				var dish = new Dishes({
+					name: this.$("input.dish-name").val().trim(),
+					description: this.$("input.dish-description").val().trim(),
+					image_url: this.$("input.dish-image").val().trim(),
+					price: this.$("input.dish-price").val().trim(), 
+					category_id: catModel.id
+				});
+				console.log(dish);
+				dish.save({}, {
+					success: function(){
+						dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
+					}
+				});
+		}});
+
 	},
 
 	on_category_created: function(category, response) {
 		// how to change this so it adds to the end
 		// able to choose a location without deleting another?
-		this.model.add(category, {at: 0});
+		this.model.add(category);
 		// trim the input vals? or do on validation?
-		var dish = new Dishes({
-			name: this.$(".new-dish-name").val(),
-			description: this.$(".new-dish-desciption").val(),
-			image_url: this.$(".new-dish-image").val(),
-			// do I need to parseInt this or will sql do automatically
-			price: this.$(".new-dish-price").val(), 
-			category: category.get("id")
-		});
+		// console.log(category);
 
-		category.save({}, {
-			success: function(){
-				dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
-			},
-			error: this.on_error,
-		});
+		// var dish = new Dishes({
+		// 	name: this.$("input.dish-name").val().trim(),
+		// 	description: this.$("input.dish-description").val().trim(),
+		// 	image_url: this.$("input.dish-image").val().trim(),
+		// 	price: this.$("input.dish-price").val().trim(), 
+		// 	category_id: category.fetch("id")
+		// });
+
+		// console.log(JSON.stringify(dish));
+
+		// console.log("190");
+
+		// dish.save({}, {
+		// 	success: function(){
+		// 		dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
+		// 	},
+		// 	error: this.on_error,
+		// });
 	},
 
 	on_error: function(model, response){
