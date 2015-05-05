@@ -4,31 +4,18 @@ var CategoryView = Backbone.View.extend({
 	className: "category-view",
 	initialize: function(){
 		console.log("categoryview init");
-		_.bindAll(this, "render", "render_dish", "addOne", "addAll", "on_submit")
+		_.bindAll(this, "render", "render_dish", "on_submit")
 		this.model.bind("change", this.render);
 		this.model.bind("reset", this.render);
-		this.model.bind("sync", this.render);
+		// this.model.bind("sync", this.render);
 		this.model.bind("add:dishes", this.render_dish);
 		// this.model.bind.fetch().done(function(){
 		// 	this.render();
 		// })
 		// this.listenTo(this.model, "sync", this.render);
-		this.dishes = new DishesCollection();
-		this.dishes.bind("reset", this.addAll);
-		this.dishes.fetch();
 	},
-
 	template: _.template($("#category-temp").html()),
 
-	addAll: function(){
-		this.dishes.each(this.addOne);
-	},
-
-	addOne: function(dish){
-		console.log("addOne");
-		var dishView = new DishView({model: dish});
-		this.$("div.dishes-list").append(dishView.render().el);
-	},
 
 	render: function(){
 		console.log("render catView")
@@ -53,7 +40,7 @@ var CategoryView = Backbone.View.extend({
 		});
 
 		newDish.save();
-		// dinerRouter.navigate("/", true);
+		dinerRouter.navigate("/", true);
 	},
 
 	render_dish: function(dish){
@@ -71,11 +58,11 @@ var DishView = Backbone.View.extend({
 	className: "dish-view",
 	initialize: function() {
 		_.bindAll(this, "render", "removeView");
-		this.model.bind("change", this.render);
-		this.model.bind("remove", this.removeView);
-		this.model.bind("reset", this.render);
-		// this.listenTo(this.model, "change", this.render);
-		// this.listenTo(this.model, "remove", this.removeView);
+		// this.model.bind("change", this.render);
+		// this.model.bind("remove", this.removeView);
+		// this.model.bind("reset", this.render);
+		this.listenTo(this.model, "change", this.render);
+		this.listenTo(this.model, "remove", this.removeView);
 	},
 
 	template: _.template($("#dish-temp").html()),
@@ -115,10 +102,16 @@ var DishView = Backbone.View.extend({
 		});
 
 		this.model.save();
+      
+		dinerRouter.navigate("#categories/"+c_id+"/", {replace: false});
 	},
 
 	deleteDish: function(){
+		var c_id = this.model.attributes.category_id;
+		// why isn't the dom refreshing?
+		console.log(this.model.id);
 		this.model.destroy();
+		dinerRouter.navigate("#categories/"+c_id+"/", {replace: false});
 	},
 
 	render: function(){

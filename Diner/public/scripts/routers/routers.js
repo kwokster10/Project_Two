@@ -1,13 +1,18 @@
 // $(document).ready(function(){
 var DinerRouter = Backbone.Router.extend({
 	routes: {
-		"categories/:id": "showCat",
+		"categories/:cid": "showCat",
 		"": "allCats"
 		// "categories": "allCats"
-		// "/dishes": 
+		// "/dishes": "addDishes"
 		// "/dishes/:dId": 
 		// "*other": "showError"
 	},
+
+	// addDishes: function(){
+	// 	var dishesCollection = new DishesCollection();
+	// 	var dishesView = new DishView
+	// },
 
 	// showing all categories--fetch the categories collection 
 	// send values to CategoryListView
@@ -19,8 +24,8 @@ var DinerRouter = Backbone.Router.extend({
 	},
 
 	// showing each category which will grab all dishes related to it
-	showCat: function(id){
-		var category = new Categories({id: id});
+	showCat: function(cid){
+		var category = new Categories({id: cid});
 		var categoryView = new CategoryView({el: $("#content"), model: category});
 		category.fetch();
 	}

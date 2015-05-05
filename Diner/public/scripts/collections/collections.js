@@ -3,7 +3,7 @@ var MenuCollection = Backbone.Collection.extend({
 	model: Categories
 });
 
-var DishesCollection = Backbone.Collection.extend({
-	url: "/dishes",
-	model: Dishes
-});
+// var DishesCollection = Backbone.Collection.extend({
+// 	url: "/dishes",
+// 	model: Dishes
+// });
