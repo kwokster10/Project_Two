@@ -1,21 +1,11 @@
-// var Categories = Backbone.Model.extend({
-// 	urlRoot: "/categories",
-// 	// idAttribute: "id",
-// });
+// defining my relational models
 
-// var Dishes = Backbone.Model.extend({
-// 	urlRoot: "/dishes",
-// 	// idAttribute: "id",
-// 	initialize: function() {
-// 		console.log("dish created");
-// 		this.on("change", function(){
-// 			console.log("change made");
-// 		});
-// 	}
-// });
+// categories model
 var Categories = Backbone.RelationalModel.extend({
 	urlRoot: "/categories",
-	// idAttribute: "id",
+	validation: {
+		name: {required: true}
+	},
 	relations: [{
 		type: Backbone.HasMany, 
 		key: "dishes", 
@@ -28,10 +18,16 @@ var Categories = Backbone.RelationalModel.extend({
 	}]
 });
 
+// dishes model
 var Dishes = Backbone.RelationalModel.extend({
 	urlRoot: "/dishes",
-	// idAttribute: "id",
 	collectionType: "DishesCollection",
+	validation: {
+		name: {required: true},
+		description: {required: true},
+		image_url: {required: true},
+		price: {min: 1}
+	},
 	initialize: function() {
 		console.log("dish created");
 		this.on("change", function(){

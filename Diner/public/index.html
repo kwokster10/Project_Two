@@ -31,7 +31,7 @@
   <h3><button id="edit-cat">edit</button>
       <button id="delete-cat">delete</button></h3>
   <div id="edit-cat-form" style="display: none">
-    Name: <input type="text" id="edit-category-name" value="<%= category.attributes.name %>" />
+    Name: <input type="text" id="edit-category-name" value="<%= category.attributes.name %>" required/>
     <button id="update-cat">update</button>
   </div>
   
@@ -82,7 +82,7 @@
  <!-- new template form: show/hide? add validation! -->
   <h2>New Category</h2>
   <ul>
-    <li>Name: <input type="text" class="new-category-name" /> </li>
+    <li>Name: <input type="text" class="new-category-name" required/> </li>
     <li>New Dish: <input class="dish-name" type="text" /></li>
     <li>Dish Description: <input class="dish-description" type="text" /></li>
     <li>Dish Image: <input class="dish-image" type="text" placeholder="url of jpg, png, tif"></li>

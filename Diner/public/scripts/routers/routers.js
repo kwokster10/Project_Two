@@ -1,18 +1,11 @@
-// $(document).ready(function(){
+// setting up my router
 var DinerRouter = Backbone.Router.extend({
 	routes: {
+		"": "allCats",
 		"categories/:cid": "showCat",
-		"": "allCats"
-		// "categories": "allCats"
-		// "/dishes": "addDishes"
-		// "/dishes/:dId": 
-		// "*other": "showError"
-	},
 
-	// addDishes: function(){
-	// 	var dishesCollection = new DishesCollection();
-	// 	var dishesView = new DishView
-	// },
+		"*other": "showError"
+	},
 
 	// showing all categories--fetch the categories collection 
 	// send values to CategoryListView
@@ -25,13 +18,13 @@ var DinerRouter = Backbone.Router.extend({
 
 	// showing each category which will grab all dishes related to it
 	showCat: function(cid){
-			var category = Categories.findOrCreate({id: cid});
-		// 	var complete = _.invoke([category], "fetch");
-		// $.when.apply($, complete).done(function(){
-			category.fetch();
-			var categoryView = new CategoryView({el: $("#content"), model: category});
-				
-		// });
+		var category = Categories.findOrCreate({id: cid});
+		category.fetch();
+		var categoryView = new CategoryView({el: $("#content"), model: category});
+	},
+
+	showError: function(){
+		$("#content").html("<p>Invalid address</p>").render();
 	}
 }); 
 

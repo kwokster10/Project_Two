@@ -8,15 +8,16 @@ body {
 .container-fluid.body-content {
   position: absolute;
   top: 70px;
-  bottom: 60px;
+  bottom: 50px;
   right: 0;
   left: 0;
   padding-top: 10px;
+  margin-left: 20px;
   overflow-y: auto;
   font-family: 'Slackey', cursive;
 }
 #truck {
-  padding-left: 150px;
+  padding-left: 240px;
   position: absolute;
   height: 102%;
   z-index: -1;
@@ -36,6 +37,9 @@ header {
     font-size: 30px;
     font-family: 'Slackey', cursive;
 }
+#content a {
+    font-size: 30px;
+}
 footer {
     position: absolute;
     left: 0;
@@ -45,4 +49,13 @@ footer {
     background-color: lightblue;
     height: 50px;
     font-family: 'Slackey', cursive;
+}
+@media(max-width: 900px) {
+    header{font-size: 20px;}
+}
+@media(max-width: 450px) {
+    header{font-size: 15px;}
+}
+@media(max-width: 270px) {
+    header{font-size: 12px;}
 }
