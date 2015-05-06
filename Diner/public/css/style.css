@@ -16,6 +16,7 @@ body {
   font-family: 'Slackey', cursive;
 }
 #truck {
+  padding-left: 150px;
   position: absolute;
   height: 102%;
   z-index: -1;

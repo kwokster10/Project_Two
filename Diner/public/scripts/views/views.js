@@ -1,18 +1,17 @@
-// to view each category
+// to view each category with all subsequent dishes
 var CategoryView = Backbone.View.extend({
 	tagName: "div",
 	className: "category-view",
+
 	initialize: function(){
+		$("#truck").addClass("animated slideOutRight");
 		console.log("categoryview init");
 		_.bindAll(this, "render", "render_dish", "on_submit")
 		this.model.bind("change", this.render);
-		this.model.bind("reset", this.render);
-		// this.model.bind("sync", this.render);
+		// this.model.bind("reset", this.render);
 		this.model.bind("add:dishes", this.render_dish);
-		// this.model.bind.fetch().done(function(){
-		// 	this.render();
-		// })
-		// this.listenTo(this.model, "sync", this.render);
+		this.render();
+		// this.listenTo(this.model, "change", document.location.reload(true););
 	},
 	template: _.template($("#category-temp").html()),
 
@@ -24,13 +23,39 @@ var CategoryView = Backbone.View.extend({
 	},
 
 	events: {
-		// separate to another form template
-		"click .new-dish-submit": "on_submit"
+		// listening for addition of new dish and when a category is deleted
+		"click .new-dish-submit": "on_submit",
+		"click #delete-cat": "deleteCat",
+		"click #edit-cat": "editCat",
+		"click #update-cat": "updateCat"
+	},
+
+	editCat: function(){
+		$("#edit-cat-form").show();
+	},
+
+	updateCat: function(){
+		this.model.set({
+			name: $("#edit-category-name").val().trim()
+		});
+
+		this.model.save();
+		dinerRouter.navigate("/", true);
+		// document.location.reload(true);
+	},
+
+	// deleting a category
+	deleteCat: function(){
+		this.model.destroy();
+		// works b/c listening to a remove event that triggers render
+		dinerRouter.navigate("/", true);
+		document.location.reload(true);
 	},
 
 	on_submit: function(e) {
 		// also add validation
 		
+		// grabbing and saving new dish
 		var newDish = new Dishes({
 			name: this.$(".new-dish-name").val().trim(),
 			description: this.$(".new-dish-description").val().trim(),
@@ -40,7 +65,9 @@ var CategoryView = Backbone.View.extend({
 		});
 
 		newDish.save();
-		dinerRouter.navigate("/", true);
+
+		// calling on the method that appends dishes to view
+		this.render_dish(newDish);
 	},
 
 	render_dish: function(dish){
@@ -61,14 +88,14 @@ var DishView = Backbone.View.extend({
 		// this.model.bind("change", this.render);
 		// this.model.bind("remove", this.removeView);
 		// this.model.bind("reset", this.render);
-		this.listenTo(this.model, "add change", this.render);
+		this.listenTo(this.model, "sync", this.render);
 		this.listenTo(this.model, "remove", this.removeView);
 	},
 
 	template: _.template($("#dish-temp").html()),
 
 	events: {
-		"keydown .body-content": "showOpts",
+		"keypress": "showOpts",
 		"click .edit-dish": "editDish",
 		"click .delete-dish": "deleteDish",
 		"click .edit-dish-submit": "updateDish"
@@ -77,7 +104,7 @@ var DishView = Backbone.View.extend({
 	showOpts: function(e){
 		console.log("keydown "+e)
 		// toggle display hide and show
-		if (e.shiftKey && e.altKey && e.keyCode == 101) {
+		if (e.shiftKey && e.altKey && e.keyCode == 69) {
 		  alert("Hello Rick!");
 			$(".edit-dish").show();
 			$(".delete-dish").show();
@@ -108,7 +135,6 @@ var DishView = Backbone.View.extend({
 
 	deleteDish: function(){
 		this.model.destroy();
-		dinerRouter.navigate("#categories/"+c_id, {trigger: true});
 	},
 
 	render: function(){
@@ -122,68 +148,39 @@ var DishView = Backbone.View.extend({
 
 // calling all the categories
 var CategoryListView = Backbone.View.extend({
-	tagName: "li",
-	className: "category-list-view", 
+	tagName: "div",
+	className: "each-category",
+	
 	initialize: function(){
-		_.bindAll(this, "render", "on_submit", "on_category_created", "removeView", "on_error");
+		_.bindAll(this, "render", "on_submit", "on_error");
 		this.model.bind("reset", this.render);
 		this.model.bind("change", this.render);
 		this.model.bind("add", this.render);
-		this.listenTo(this.model, "remove", this.removeView);
+		// this.listenTo(this.collection, "remove", this.removeView);
 	},
 
 	template: _.template($("#categories-list-temp").html()),
 
 	render: function(){
 		console.log("catListRender");
-		// think I will need to pass {category: this.model.toJSON}?
-		// this.$el.html(this.template({category: this.model.toJSON()}));
-		// this.model.forEach(this.render_category_summary);
-		// return this;
 		this.$el.empty();
 		this.$el.html(this.template({categories: this.model.toJSON()}));
 		return this;
-		// var ul = $("#category-list");
-		// this.$el.html('<a href="/#categories/"')
-
-		// var container = document.createDocumentFragment();
-		
-
-		// _.each(this._views, function(subview){
-		// 	console.log("subview");
-		// 	console.log(subview);
-		// 	container.appendChild(subview.render().el)
-		// });
-		// this.$el.append(ul);
-		// this.$el.append(container);
-		// this.model.forEach(this.render_category_summary);
-		// return this;
 	},
 
 	events: {
 		// add validation
-		"click input[type=submit]": "on_submit",
-		"click .delete-cat": "deleteCat"
+		"click input.new-category": "on_submit",
+		"click a": "refresh"
 	},
 
-	deleteCat: function(){
-		console.log("deleteCat");
-		console.log(this.options.collection);
-		this.options.collection.remove(this.model);
+	// nav is updated with address but view doesn't render
+	// refreshes page to force rendering of view
+	refresh: function(){
+		document.location.reload(true);
 	},
 
-	removeView: function(){
-		this.remove();
-	},
-
-	// render_category_summary: function(category){
-	// 	// what is category here? is it actually being passed categories?
-	// 	console.log("catListSumRender");
-	// 	var categorySumView = new CategorySumView({model: category});
-	// 	this.$el.find("ul.categories-list").html(this.template({categories: this.model.toJSON()}));
-	// },
-
-	// currently commented out in html
+	// to add a category with a dish
 	on_submit: function(e) {
 		var category = new Categories({
 			name: this.$(".new-category-name").val().trim()
@@ -200,7 +197,6 @@ var CategoryListView = Backbone.View.extend({
 		category.save({}, {
 			success: function(catModel){
 				console.log(catModel);
-				_this.model.add(catModel);
 
 				var dish = new Dishes({
 					name: this.$("input.dish-name").val().trim(),
@@ -209,42 +205,53 @@ var CategoryListView = Backbone.View.extend({
 					price: this.$("input.dish-price").val().trim(), 
 					category_id: catModel.id
 				});
-				console.log(dish);
+
+				// clearing all of the fields
+				$(".new-category-name").val("");
+				$("input.dish-name").val("");
+				$("input.dish-description").val("");
+				$("input.dish-image").val("");
+				$("input.dish-price").val("");
+
+				// adding the category to the dom
+				// has to be done before or all values disappear
+				_this.model.add(catModel);
+
 				dish.save({}, {
 					success: function(){
-						dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
+						dinerRouter.navigate("/categories/"+catModel.id, {trigger: true});
 					}
 				});
 		}});
 
 	},
 
-	on_category_created: function(category, response) {
-		// how to change this so it adds to the end
-		// able to choose a location without deleting another?
-		this.model.add(category);
-		// trim the input vals? or do on validation?
-		// console.log(category);
+	// on_category_created: function(category, response) {
+	// 	// how to change this so it adds to the end
+	// 	// able to choose a location without deleting another?
+	// 	this.model.add(category);
+	// 	// trim the input vals? or do on validation?
+	// 	// console.log(category);
 
-		// var dish = new Dishes({
-		// 	name: this.$("input.dish-name").val().trim(),
-		// 	description: this.$("input.dish-description").val().trim(),
-		// 	image_url: this.$("input.dish-image").val().trim(),
-		// 	price: this.$("input.dish-price").val().trim(), 
-		// 	category_id: category.fetch("id")
-		// });
+	// 	// var dish = new Dishes({
+	// 	// 	name: this.$("input.dish-name").val().trim(),
+	// 	// 	description: this.$("input.dish-description").val().trim(),
+	// 	// 	image_url: this.$("input.dish-image").val().trim(),
+	// 	// 	price: this.$("input.dish-price").val().trim(), 
+	// 	// 	category_id: category.fetch("id")
+	// 	// });
 
-		// console.log(JSON.stringify(dish));
+	// 	// console.log(JSON.stringify(dish));
 
-		// console.log("190");
+	// 	// console.log("190");
 
-		// dish.save({}, {
-		// 	success: function(){
-		// 		dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
-		// 	},
-		// 	error: this.on_error,
-		// });
-	},
+	// 	// dish.save({}, {
+	// 	// 	success: function(){
+	// 	// 		dinerRouter.navigate("categories/"+category.get("id"), {trigger: true});
+	// 	// 	},
+	// 	// 	error: this.on_error,
+	// 	// });
+	// },
 
 	on_error: function(model, response){
 		var error = $.parseJSON(response.responseText);
@@ -252,33 +259,6 @@ var CategoryListView = Backbone.View.extend({
 	}
 });
 
-// for each category to render
-var CategorySumView = Backbone.View.extend({
-	tagName: "li",
-	className: "category-sum-view", 
-	initialize: function(){
-		_.bindAll(this, "render", "on_click");
-		this.model.bind("change", this.render);
-	},
-
-	template: _.template($("#category-sum-temp").html()),
-
-	render: function(){
-		console.log("here?");
-		// check the {model} sent
-		// console.log(this.model.toJSON());
-		$(this.el).html(this.template(this.model.toJSON()));
-		return this;
-	},
-
-	events: {
-		"click": "on_click"
-	},
-
-	on_click: function(e){
-		dinerRouter.navigate("categories/"+this.model.get("id"), {trigger: true});
-	}
-});
 
 
 // keycodes: 

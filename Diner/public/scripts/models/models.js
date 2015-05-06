@@ -37,6 +37,7 @@ var Dishes = Backbone.RelationalModel.extend({
 		this.on("change", function(){
 			console.log("dish change made");
 		});
+
 	}
 });
 

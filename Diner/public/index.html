@@ -16,25 +16,24 @@
  <img id="truck" class="animated slideInLeft" src="./images/food_truck.png">
  
   <!-- this will need other divs so it can look like menu boards -->
-  <div id="nav">
-  <li><a href="/">Home</a></li>
   <div id="content">
   <ul class="categories-list">
- 
-    
-  <br> Still here? <br>
   </ul>
   </div>
- </div>
 </div>
 
 <footer>Find me on the corner of 5 Ave. and 21st when I'm not on the run. Let me cater your next event! Reservations made at 555 - 555 - 4321.</footer>
 
 <!-- template for individual category -->
 <script type="text/template" id="category-temp">
-  <h2>
-      <%= category.attributes.name %> 
-  </h2>
+<a href="/">Home</a>
+  <h1><%= category.attributes.name %> </h1>
+  <h3><button id="edit-cat">edit</button>
+      <button id="delete-cat">delete</button></h3>
+  <div id="edit-cat-form" style="display: none">
+    Name: <input type="text" id="edit-category-name" value="<%= category.attributes.name %>" />
+    <button id="update-cat">update</button>
+  </div>
   
   <div class="dishes-list"></div>
   <!-- add more dishes here or in sep template? hide? -->
@@ -48,10 +47,6 @@
       <li><input type="submit" class="new-dish-submit" value="Create New Dish"></li>
     </ul>
     <div class="error-message"></div>
-</script>
-
-<script type="text/template" id="category-sum-temp">
-  <ul></ul>
 </script>
 
 <script type="text/template" id="dish-temp">
@@ -80,12 +75,11 @@
   <ul class="categories-list">
      <% categories.forEach(function(category){ %>
           <li><a href="/#categories/<%= category.id %>"><%= category.name %></a>
-            <button class="delete-cat">delete</button>
           </li>
      <% }) %>
   </ul>
 
- <!-- new template form or show/hide? add validation! -->
+ <!-- new template form: show/hide? add validation! -->
   <h2>New Category</h2>
   <ul>
     <li>Name: <input type="text" class="new-category-name" /> </li>
