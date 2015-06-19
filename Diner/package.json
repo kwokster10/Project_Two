@@ -1,20 +1,19 @@
 {
   "name": "Diner",
-  "version": "0.0.0",
-  "description": "Diner",
+  "version": "1.0.0",
+  "description": "",
   "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.12.3",
+    "cors": "^2.6.0",
+    "sqlite3": "^3.0.5",
+    "express": "^4.12.3"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "backbone-relational": "^0.9.0",
-    "body-parser": "^1.12.3",
-    "cors": "^2.6.0",
-    "express": "^4.12.3",
-    "sqlite3": "^3.0.5"
-  },
-  "devDependencies": {}
+  "license": "ISC"
 }
