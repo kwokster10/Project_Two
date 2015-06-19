@@ -72,16 +72,20 @@ var CategoryView = Backbone.View.extend({
 		$(".new-dish-image").val("");
 		$(".new-dish-price").val("");
 
-		// saves new dish to db
-		// newDish.validate: {
-		// 	name: {required: true},
-		// 	description: {required: true},
-		// 	image_url: {required: true},
-		// 	price: {min: 1}
-		// }
-
-		// var errors = newDish.preValidate
-		newDish.save();
+		newDish.Backbone.Validation.extend({
+			model: newDish
+		});
+		newDish.validate();
+		newDish.bind('validated', function(isValid, mode, errors){
+			if(isValid === true){
+				thisView.collection.create(jserDish); 
+				dishRoutes.navigate('#dishes',true);
+			}else{
+				Object.keys(errors).forEach(function(key){
+					$('.errorMsg').append("<br>"+errors[key]); 
+				});
+			}
+		});
 
 		// calling on the method that appends dishes to view
 		this.render_dish(newDish);
