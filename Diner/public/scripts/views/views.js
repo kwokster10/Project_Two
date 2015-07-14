@@ -6,7 +6,7 @@ var CategoryView = Backbone.View.extend({
 	initialize: function(){
 		$("#truck").addClass("animated slideOutRight");
 		
-		_.bindAll(this, "render", "render_dish", "on_submit")
+		_.bindAll(this, "render", "render_dish", "onSubmit");
 		this.model.bind("change", this.render);
 		this.model.bind("add:dishes", this.render_dish);
 	},
@@ -20,10 +20,14 @@ var CategoryView = Backbone.View.extend({
 
 	// listening for addition of new dish and when a category is deleted or updated
 	events: {
-		"click .new-dish-submit": "on_submit",
 		"click #delete-cat": "deleteCat",
 		"click #edit-cat": "editCat",
-		"click #update-cat": "updateCat"
+		"click #update-cat": "updateCat",
+		"click .new-dish-submit": 
+		function(e) {
+			e.preventDefault();
+			this.onSubmit();
+		}
 	},
 
 	// showing the edit category form
@@ -47,6 +51,7 @@ var CategoryView = Backbone.View.extend({
 	// deleting a category 
 	deleteCat: function(){
 		this.model.destroy();
+		// this.model.remove();
 		// works b/c listening to a remove event that triggers render
 		dinerRouter.navigate("/", true);
 		// forcing reload to get to my page
@@ -54,9 +59,8 @@ var CategoryView = Backbone.View.extend({
 	},
 
 	// runs when submit button for new dish creation gets clicked
-	on_submit: function(e) {
-		// add validation here
-		
+	onSubmit: function() {
+
 		// grabbing and saving new dish
 		var newDish = new Dishes({
 			name: this.$(".new-dish-name").val().trim(),
@@ -65,20 +69,20 @@ var CategoryView = Backbone.View.extend({
 			price: this.$(".new-dish-price").val().trim(), 
 			category_id: this.model.id
 		});
+		console.log(this);
 
-		// clearing input fields
-		$(".new-dish-name").val("");
-		$(".new-dish-description").val("");
-		$(".new-dish-image").val("");
-		$(".new-dish-price").val("");
-
-		newDish.Backbone.Validation.extend({
+		var that = this;
+		// validating input values
+		Backbone.Validation.bind(this, {
 			model: newDish
 		});
+
 		newDish.validate();
-		newDish.bind('validated', function(isValid, mode, errors){
+
+		newDish.bind('validated', function(isValid, model, errors){
 			if(isValid === true){
-				thisView.collection.create(jserDish); 
+				console.log("in Validation")
+				that.collection.create(newDish); 
 				dishRoutes.navigate('#dishes',true);
 			}else{
 				Object.keys(errors).forEach(function(key){
@@ -86,6 +90,13 @@ var CategoryView = Backbone.View.extend({
 				});
 			}
 		});
+
+		// clearing input fields
+		$(".new-dish-name").val("");
+		$(".new-dish-description").val("");
+		$(".new-dish-image").val("");
+		$(".new-dish-price").val("");
+
 
 		// calling on the method that appends dishes to view
 		this.render_dish(newDish);
@@ -158,6 +169,7 @@ var DishView = Backbone.View.extend({
 	// deleting a dish
 	deleteDish: function(){
 		this.model.destroy();
+		this.remove();
 	},
 
 	render: function(){
@@ -191,7 +203,6 @@ var CategoryListView = Backbone.View.extend({
 	},
 
 	events: {
-		// add validation
 		"click input.new-category-submit": "on_submit",
 		"click a": "refresh"
 	},
@@ -204,43 +215,70 @@ var CategoryListView = Backbone.View.extend({
 
 	// to add a category with a dish
 	on_submit: function(e) {
-		// creating new category and grabbing value
-		var category = new Categories({
-			name: this.$(".new-category-name").val().trim()
-		});
+		if ($(".new-category-name").val().trim().length > 3) {
+			// creating new category and grabbing value
+			var category = new Categories({
+				name: this.$(".new-category-name").val().trim()
+			});
 
-		// allows category to grab this instance of model in save()
-		var _this = this;
+			// allows category to grab this instance of model in save()
+			var _this = this;
 
-		category.save({}, {
-			success: function(catModel){
-				console.log("reaching?")
-				// storing values for new dish
-				var dish = new Dishes({
-					name: this.$("input.dish-name").val().trim(),
-					description: this.$("input.dish-description").val().trim(),
-					image_url: this.$("input.dish-image").val().trim(),
-					price: this.$("input.dish-price").val().trim(), 
-					category_id: catModel.id
-				});
+			category.save({}, {
+				success: function(catModel){
+					// storing values for new dish
+					var dish = new Dishes({
+						name: this.$("input.dish-name").val().trim(),
+						description: this.$("input.dish-description").val().trim(),
+						image_url: this.$("input.dish-image").val().trim(),
+						price: this.$("input.dish-price").val().trim(), 
+						category_id: catModel.id
+					});
 
-				// clearing all of the input fields
-				$(".new-category-name").val("");
-				$("input.dish-name").val("");
-				$("input.dish-description").val("");
-				$("input.dish-image").val("");
-				$("input.dish-price").val("");
+					// clearing all of the input fields
+					$(".new-category-name").val("");
+					$("input.dish-name").val("");
+					$("input.dish-description").val("");
+					$("input.dish-image").val("");
+					$("input.dish-price").val("");
 
-				// adding the category to the dom
-				// has to be done after dish or all values disappear
-				_this.model.add(catModel);
 
-				dish.save({}, {
-					success: function(){
-						dinerRouter.navigate("/categories/"+catModel.id, {trigger: true});
-					}
-				});
-		}});
+					Backbone.Validation.bind(this, {
+						model: dish
+					});
+
+					dish.validate();
+
+					dish.bind('validated', function(isValid, model, errors){
+						console.log("dish validation")
+						if(isValid === true){
+							console.log("in Validation")
+							_this.collection.create(dish); 
+							// adding the category to the dom
+							// has to be done after dish or all values disappear
+							_this.model.add(catModel);
+
+							dish.save({}, {
+								success: function(){
+									dinerRouter.navigate("/categories/"+catModel.id, {trigger: true});
+								}
+							});
+						} else {
+							console.log("in dish errors")
+							// adding the category to the dom
+							// has to be done after dish or all values disappear
+							_this.model.add(catModel);
+							$('.error-message').html("<br>The new category was saved but not the dish due to these errors:<br>");
+							Object.keys(errors).forEach(function(key){
+								$('.error-message').append(errors[key]+"<br>");
+							});
+						}
+					});
+				}
+			});
+		} else {
+			$('.error-message').html("<br>Category name must be longer than 3 letters.")
+		}
 
 	},
 

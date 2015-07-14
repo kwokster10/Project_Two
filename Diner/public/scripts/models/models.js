@@ -3,9 +3,9 @@
 // categories model
 var Categories = Backbone.RelationalModel.extend({
 	urlRoot: "/categories",
-	validation: {
-		name: {required: true}
-	},
+	// validation: {
+	// 	name: {required: true}
+	// },
 	relations: [{
 		type: Backbone.HasMany, 
 		key: "dishes", 
@@ -29,11 +29,11 @@ var Dishes = Backbone.RelationalModel.extend({
 			msg: "Please enter a name for your dish."},
 		description: {
 			required: true, 
-			minLength: 3, 
+			minLength: 10, 
 			msg: "Tell your customers about your dish."},
 		image_url: {
 			required: true,
-			pattern: url, 
+			// pattern: url, 
 			msg: "Please enter a valid image url."},
 		price: {
 			min: 1,
@@ -42,7 +42,7 @@ var Dishes = Backbone.RelationalModel.extend({
 	initialize: function() {
 		console.log("dish created");
 		this.on("change", function(){
-			console.log("dish change made");
+			console.log("dish changed");
 		});
 
 	}
