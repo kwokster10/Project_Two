@@ -45,13 +45,11 @@ var CategoryView = Backbone.View.extend({
 		this.model.save();
 		// rerouting to main page b/c dishes need to be grabbed
 		dinerRouter.navigate("/", true);
-		// document.location.reload(true);
 	},
 
 	// deleting a category 
 	deleteCat: function(){
 		this.model.destroy();
-		// this.model.remove();
 		// works b/c listening to a remove event that triggers render
 		dinerRouter.navigate("/", true);
 		// forcing reload to get to my page
@@ -69,7 +67,6 @@ var CategoryView = Backbone.View.extend({
 			price: this.$(".new-dish-price").val().trim(), 
 			category_id: this.model.id
 		});
-		console.log(this);
 
 		var that = this;
 		// validating input values

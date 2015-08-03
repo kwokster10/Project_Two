@@ -8,7 +8,7 @@ A horrible disease outbreak has overtaken much of the world and turned ordinary 
 - This project takes the idea of a food truck to the next level. 
 - It offers an enticing menu to the zombies.
 - It's mobile in case the zombies decide Rick looks more delicious. So pick something off the menu and not the chef!
-- Check out the spec for the site features.
+- Check out the feature_specs.md for the site features.
 - Connect here from your computer: 45.55.155.149:3000
 
 ### Revisit: 
