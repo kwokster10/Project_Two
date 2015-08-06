@@ -3,7 +3,6 @@ var DinerRouter = Backbone.Router.extend({
 	routes: {
 		"": "allCats",
 		"categories/:cid": "showCat",
-
 		"*other": "showError"
 	},
 
@@ -23,8 +22,13 @@ var DinerRouter = Backbone.Router.extend({
 		var categoryView = new CategoryView({el: $("#content"), model: category});
 	},
 
+	// if user goes to non-existent page
 	showError: function(){
-		$("#content").html("<p>Invalid address</p>").render();
+		$("#content").html("<p>Invalid URL</p>").css({
+			"color": "red",
+			"margin-left": "15px",
+			"font-size": "30px"
+		}).append("<a href='/rick-run'>Home</a>");
 	}
 }); 
 

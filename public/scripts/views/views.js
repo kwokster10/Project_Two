@@ -287,7 +287,7 @@ var CategoryListView = Backbone.View.extend({
 });
 
 
-
+// want to incorporate this later to show the edit options to Rick only; secret keys
 // keycodes: 
 // e = 101
 // c = 99

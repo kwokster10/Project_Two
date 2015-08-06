@@ -9,7 +9,8 @@ var app = express();
 app.use(cors());
 app.use(bodyParser.json({ extended: false }));
 
-app.use(express.static('public'));
+// namespacing my app
+app.use("/rick-run", express.static('public'));
 
 app.get('/', function(req, res){
 	res.render('index.html')

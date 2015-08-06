@@ -26,7 +26,7 @@
 
 <!-- template for individual category -->
 <script type="text/template" id="category-temp">
-<a href="/">Home</a>
+<a href="/rick-run">Home</a>
   <h1><%= category.attributes.name %> </h1>
   <h3><button id="edit-cat">edit</button>
       <button id="delete-cat">delete</button></h3>
@@ -74,7 +74,7 @@
 <script type="text/template" id="categories-list-temp">
   <ul class="categories-list">
      <% categories.forEach(function(category){ %>
-          <li><a href="/#categories/<%= category.id %>"><%= category.name %></a>
+          <li><a href="/rick-run/#categories/<%= category.id %>"><%= category.name %></a>
           </li>
      <% }) %>
   </ul>
