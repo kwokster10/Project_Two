@@ -9,7 +9,7 @@ A horrible disease outbreak has overtaken much of the world and turned ordinary 
 - It offers an enticing menu to the zombies.
 - It's mobile in case the zombies decide Rick looks more delicious. So pick something off the menu and not the chef!
 - Check out the feature_specs.md for the site features.
-- Connect here from your computer: 45.55.155.149:3000
+- Connect here from your computer: [Rick-Run](http://juliekwok.ddns.net:3000/)
 
 ### Revisit: 
 - reorganize code
