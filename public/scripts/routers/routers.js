@@ -28,7 +28,7 @@ var DinerRouter = Backbone.Router.extend({
 			"color": "red",
 			"margin-left": "15px",
 			"font-size": "30px"
-		}).append("<a href='/rick-run'>Home</a>");
+		}).append("<a href='/'>Home</a>");
 	}
 }); 
 
