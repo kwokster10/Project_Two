@@ -9,8 +9,9 @@ var app = express();
 app.use(cors());
 app.use(bodyParser.json({ extended: false }));
 
-// namespacing my app
-app.use("/rick-run", express.static('public'));
+// if you wanted to namespace your app, include it like so 
+// app.use("/rick-run", express.static('public'));
+app.use(express.static('public'));
 
 app.get('/', function(req, res){
 	res.render('index.html')
